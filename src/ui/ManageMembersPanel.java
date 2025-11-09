@@ -21,6 +21,13 @@ public class ManageMembersPanel extends JPanel {
         String[] columns = {"Member ID", "Name", "Department", "Email", "Membership"};
         model = new DefaultTableModel(columns, 0);
         table = new JTable(model);
+        table.setBackground(new Color(40, 40, 40));
+        table.setForeground(Color.WHITE);
+        table.setGridColor(new Color(70, 70, 70));
+        table.getTableHeader().setBackground(new Color(60, 63, 65));  
+        table.getTableHeader().setForeground(Color.WHITE);
+        table.setRowHeight(25);
+        
         add(new JScrollPane(table), BorderLayout.CENTER);
 
         JButton refreshBtn = new JButton("🔄 Refresh");
