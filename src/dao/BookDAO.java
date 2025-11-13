@@ -30,5 +30,48 @@ public class BookDAO {
 	    return books;
 	}
 
+	public static boolean addBook(Book book) {
+		String sql = "INSERT INTO books (title, author, publisher, available_copies) VALUES (?, ?, ?, ?)";
+		try (Connection conn = DBConnection.getConnection();
+				PreparedStatement pst = conn.prepareStatement(sql)) {
+			pst.setString(1, book.getTitle());
+			pst.setString(2, book.getAuthor());
+			pst.setString(3, book.getPublisher());
+			pst.setInt(4, book.getAvailableCopies());
+			return pst.executeUpdate() > 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public static boolean updateBook(Book book) {
+		String sql = "UPDATE books SET title=?, author=?, publisher=?, available_copies=? WHERE book_id=?";
+		try (Connection conn = DBConnection.getConnection();
+				PreparedStatement pst = conn.prepareStatement(sql)) {
+			pst.setString(1, book.getTitle());
+			pst.setString(2, book.getAuthor());
+			pst.setString(3, book.getPublisher());
+			pst.setInt(4, book.getAvailableCopies());
+			pst.setInt(5, book.getId());
+			return pst.executeUpdate() > 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	public static boolean deleteBook(int bookId) {
+		String sql = "DELETE FROM books WHERE book_id=?";
+		try (Connection conn = DBConnection.getConnection();
+				PreparedStatement pst = conn.prepareStatement(sql)) {
+			pst.setInt(1, bookId);
+			return pst.executeUpdate() > 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 }
 

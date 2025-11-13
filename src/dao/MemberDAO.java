@@ -50,17 +50,23 @@ public class MemberDAO {
         } catch (Exception e) {
             System.out.println("❌ Registration Error: " + e.getMessage());
             try {
-                if (conn != null) conn.rollback();
+                if (conn != null)
+                    conn.rollback();
             } catch (SQLException ex) {
                 System.out.println("Rollback failed: " + ex.getMessage());
             }
         } finally {
             try {
-                if (rs != null) rs.close();
-                if (pst1 != null) pst1.close();
-                if (pst2 != null) pst2.close();
-                if (conn != null) conn.setAutoCommit(true);
-            } catch (SQLException ignored) {}
+                if (rs != null)
+                    rs.close();
+                if (pst1 != null)
+                    pst1.close();
+                if (pst2 != null)
+                    pst2.close();
+                if (conn != null)
+                    conn.setAutoCommit(true);
+            } catch (SQLException ignored) {
+            }
         }
         return success;
     }
@@ -72,19 +78,18 @@ public class MemberDAO {
         String query = "SELECT member_id, name, department, email, phone, join_date, membership FROM members";
 
         try (Connection conn = DBConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
                 Member m = new Member(
-                    rs.getInt("member_id"),
-                    rs.getString("name"),
-                    rs.getString("department"),
-                    rs.getString("email"),
-                    rs.getLong("phone"),
-                    rs.getDate("join_date"),
-                    rs.getString("membership")
-                );
+                        rs.getInt("member_id"),
+                        rs.getString("name"),
+                        rs.getString("department"),
+                        rs.getString("email"),
+                        rs.getLong("phone"),
+                        rs.getDate("join_date"),
+                        rs.getString("membership"));
                 members.add(m);
             }
 
@@ -94,4 +99,47 @@ public class MemberDAO {
 
         return members;
     }
+
+    public static boolean addMember(String name, String dept, String email, long phone, String membership) {
+        String sql = "INSERT INTO members (name, department, email, phone, join_date, membership) VALUES (?, ?, ?, ?, CURDATE(), ?)";
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setString(1, name);
+            pst.setString(2, dept);
+            pst.setString(3, email);
+            pst.setLong(4, phone);
+            pst.setString(5, membership);
+            return pst.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean updateMember(int id, String name, String dept, String email, long phone, String membership) {
+        String sql = "UPDATE members SET name=?, department=?, email=?, phone=?, membership=? WHERE member_id=?";
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setString(1, name);
+            pst.setString(2, dept);
+            pst.setString(3, email);
+            pst.setLong(4, phone);
+            pst.setString(5, membership);
+            pst.setInt(6, id);
+            return pst.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean deleteMember(int id) {
+        String sql = "DELETE FROM members WHERE member_id=?";
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, id);
+            return pst.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }

@@ -40,16 +40,21 @@ public class Dashboard extends JFrame {
 
         // 🧩 Role-based menu setup
         if (role.equalsIgnoreCase("admin")) {
-            // 👑 Admin: Can manage books and members only
             JButton booksBtn = styledButton("📚 Manage Books", accent);
             JButton membersBtn = styledButton("👥 Manage Members", accent);
+            JButton issueBtn = styledButton("📖 Issue Books", accent);
+            JButton profileBtn = styledButton("👤 My Profile", accent);
 
             sidebar.add(booksBtn);
             sidebar.add(membersBtn);
+            sidebar.add(issueBtn);
+            sidebar.add(profileBtn);
 
-            booksBtn.addActionListener(e -> switchPanel(new ManageBooksPanel()));
-            membersBtn.addActionListener(e -> switchPanel(new ManageMembersPanel()));
+            booksBtn.addActionListener(e -> switchPanel(new ManageBooksPanel(true))); // admin mode
+            membersBtn.addActionListener(e -> switchPanel(new ManageMembersPanel(true)));
+            issueBtn.addActionListener(e -> switchPanel(new IssueReturnPanel()));
 
+            profileBtn.addActionListener(e -> switchPanel(new AdminProfilePanel()));
         } else if (role.equalsIgnoreCase("staff")) {
             // 🧰 Staff: Can manage books + issue/return
             JButton booksBtn = styledButton("📚 Manage Books", accent);
@@ -77,13 +82,12 @@ public class Dashboard extends JFrame {
             profileBtn.addActionListener(e -> {
                 if (loggedMember != null) {
                     switchPanel(new ProfilePanel(
-                        loggedMember.getMemberId(),
-                        loggedMember.getName(),
-                        loggedMember.getDepartment(),
-                        loggedMember.getEmail(),
-                        loggedMember.getPhone(),
-                        loggedMember.getMembership()
-                    ));
+                            loggedMember.getMemberId(),
+                            loggedMember.getName(),
+                            loggedMember.getDepartment(),
+                            loggedMember.getEmail(),
+                            loggedMember.getPhone(),
+                            loggedMember.getMembership()));
                 } else {
                     JOptionPane.showMessageDialog(this, "⚠️ Member info not loaded properly.");
                 }
@@ -123,6 +127,7 @@ public class Dashboard extends JFrame {
                 btn.setBackground(accent);
                 btn.setForeground(Color.BLACK);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn.setBackground(new Color(45, 45, 45));
                 btn.setForeground(new Color(224, 224, 224));
