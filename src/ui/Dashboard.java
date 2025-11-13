@@ -42,18 +42,22 @@ public class Dashboard extends JFrame {
         if (role.equalsIgnoreCase("admin")) {
             JButton booksBtn = styledButton("📚 Manage Books", accent);
             JButton membersBtn = styledButton("👥 Manage Members", accent);
+            JButton staffBtn = styledButton("🧑‍💼 Manage Staff", accent); // updated label
             JButton issueBtn = styledButton("📖 Issue Books", accent);
             JButton profileBtn = styledButton("👤 My Profile", accent);
 
+            // add buttons to sidebar in desired order
             sidebar.add(booksBtn);
             sidebar.add(membersBtn);
+            sidebar.add(staffBtn); // ⚡ important: add this line
             sidebar.add(issueBtn);
             sidebar.add(profileBtn);
 
+            // action listeners
             booksBtn.addActionListener(e -> switchPanel(new ManageBooksPanel(true))); // admin mode
             membersBtn.addActionListener(e -> switchPanel(new ManageMembersPanel(true)));
+            staffBtn.addActionListener(e -> switchPanel(new ManageStaffPanel())); // ⚡ add this
             issueBtn.addActionListener(e -> switchPanel(new IssueReturnPanel()));
-
             profileBtn.addActionListener(e -> switchPanel(new AdminProfilePanel()));
         } else if (role.equalsIgnoreCase("staff")) {
             // 🧰 Staff: Can manage books + issue/return

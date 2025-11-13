@@ -1,4 +1,5 @@
 package dao;
+
 import java.sql.*;
 import java.util.*;
 import db.DBConnection;
@@ -11,18 +12,17 @@ public class IssueDAO {
         List<Issue> issues = new ArrayList<>();
         String sql = "SELECT * FROM issue";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql);
-             ResultSet rs = pst.executeQuery()) {
+                PreparedStatement pst = conn.prepareStatement(sql);
+                ResultSet rs = pst.executeQuery()) {
 
             while (rs.next()) {
                 issues.add(new Issue(
-                    rs.getInt("issue_id"),
-                    rs.getInt("book_id"),
-                    rs.getInt("member_id"),
-                    rs.getDate("issue_date"),
-                    rs.getDate("due_date"),
-                    rs.getDate("return_date")
-                ));
+                        rs.getInt("issue_id"),
+                        rs.getInt("book_id"),
+                        rs.getInt("member_id"),
+                        rs.getDate("issue_date"),
+                        rs.getDate("due_date"),
+                        rs.getDate("return_date")));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,8 +36,8 @@ public class IssueDAO {
         String updateBook = "UPDATE books SET available_copies = available_copies - 1 WHERE book_id = ? AND available_copies > 0";
 
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pst1 = conn.prepareStatement(sql);
-             PreparedStatement pst2 = conn.prepareStatement(updateBook)) {
+                PreparedStatement pst1 = conn.prepareStatement(sql);
+                PreparedStatement pst2 = conn.prepareStatement(updateBook)) {
 
             conn.setAutoCommit(false);
 
@@ -63,8 +63,8 @@ public class IssueDAO {
         String updateBook = "UPDATE books SET available_copies = available_copies + 1 WHERE book_id=?";
 
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pst1 = conn.prepareStatement(sql);
-             PreparedStatement pst2 = conn.prepareStatement(updateBook)) {
+                PreparedStatement pst1 = conn.prepareStatement(sql);
+                PreparedStatement pst2 = conn.prepareStatement(updateBook)) {
 
             conn.setAutoCommit(false);
 
@@ -83,5 +83,20 @@ public class IssueDAO {
         }
         return false;
     }
-}
 
+    // Add inside IssueDAO.java
+    public static int getIssuedBookCountByMember(int memberId) {
+        String sql = "SELECT COUNT(*) FROM issue WHERE member_id = ? AND return_date IS NULL";
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, memberId);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next())
+                return rs.getInt(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+}
