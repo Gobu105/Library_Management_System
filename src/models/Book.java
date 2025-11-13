@@ -7,6 +7,7 @@ public class Book {
     private String publisher;
     private int availableCopies;
 
+    // ✅ Clean and correct constructor
     public Book(int id, String title, String author, String publisher, int availableCopies) {
         this.id = id;
         this.title = title;
@@ -22,4 +23,3 @@ public class Book {
     public String getPublisher() { return publisher; }
     public int getAvailableCopies() { return availableCopies; }
 }
-

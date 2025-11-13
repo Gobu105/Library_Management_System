@@ -47,5 +47,10 @@ public class Member {
     public String toString() {
         return memberId + " - " + name + " (" + membership + ")";
     }
+
+    public void setPassword(String password) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setPassword'");
+    }
 }
 

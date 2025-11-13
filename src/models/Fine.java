@@ -7,7 +7,7 @@ public class Fine {
     private double amount;
     private String status;
 
-    public Fine(int fineId, int memberId, int bookId, double amount, String status) {
+    public Fine(int fineId, int memberId, double amount, String status) {
         this.fineId = fineId;
         this.memberId = memberId;
         this.bookId = bookId;

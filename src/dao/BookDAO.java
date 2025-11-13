@@ -20,7 +20,6 @@ public class BookDAO {
                 	rs.getString("publisher"),
         	        rs.getInt("available_copies")
         	    );
-        	    System.out.println("Loaded book: " + b.getTitle()); // 🟡 debug print
         	    books.add(b);
         	}
 	

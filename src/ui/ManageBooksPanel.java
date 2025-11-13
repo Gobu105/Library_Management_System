@@ -20,12 +20,15 @@ public class ManageBooksPanel extends JPanel {
         String[] columns = {"Book ID", "Title", "Author", "Available Copies"};
         model = new DefaultTableModel(columns, 0);
         table = new JTable(model);
-        table.setBackground(new Color(40, 40, 40));
-        table.setForeground(Color.WHITE);
-        table.setGridColor(new Color(70, 70, 70));
-        table.getTableHeader().setBackground(new Color(60, 63, 65));  
-        table.getTableHeader().setForeground(Color.WHITE);
-        table.setRowHeight(25);
+        table.setBackground(new Color(24, 24, 24));
+        table.setGridColor(new Color(44, 44, 44));
+        table.getTableHeader().setBackground(new Color(30, 30, 30));
+        table.getTableHeader().setForeground(new Color(0, 255, 136));
+        table.setSelectionBackground(new Color(0, 255, 136));
+        table.setSelectionForeground(Color.BLACK);
+        table.setRowHeight(26);
+        table.setForeground(new Color(224, 224, 224));
+        
         add(new JScrollPane(table), BorderLayout.CENTER);
 
         loadBooks();  // 👈 Fetch from DB when panel loads
